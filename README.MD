@@ -3,10 +3,12 @@
 - 设置加密密钥和偏移量
   目前对springboot项目支持较为优化,只需要在springboot的项目配置文件下加上以下两个
   配置变量即可:
+```yaml
   # 加密密钥
   keyStr: 
   # 偏移量
   ivStr:
+```
 - 在字段上加注解
 ```text
 对需要使用注解的字段加上注解,注解的值为加解密处理的实现类类名.该实现类需要继承
@@ -47,10 +49,26 @@ decryptor.handle(user);
 我们可以写一个基于方法的注解和切面.在方法上加上注解然后让此方面被调用的时候
 切面直接自动调用加解密的方法.
 示例:
+1.自定义注解
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface CryptorAnnotation {
+    /**
+     * 加解密注解 默认为空 不做处理
+     * @return
+     */
+    String cryptoValue() default "";
+
+}
+```
+
+2.切面
 ```java
 /**
  * @author Lake
- * @description: 超级切面
+ * @description: 加解密切面
  * @date 2019/3/20
  */
 @Aspect
@@ -113,3 +131,12 @@ public class CryptorAspect {
     }
 }
 ```
+3. 使用注解
+```java
+  @CryptorAnnotation("ENC")
+  @ResponseBody
+  public Map<String,Object> add(@RequestBody User user){
+     //业务代码
+  }
+```
+这样在业务代码中一个代码即可搞定针对入参的部分类的加密解密的功能了.
