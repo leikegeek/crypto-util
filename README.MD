@@ -1,7 +1,7 @@
 两个注解搞定字段的加解密
 ## 快速上手
-- 引入jar包,本工具类已经发布至maven官方仓库,直接引用即可,另外本工具依赖了apache的
-
+- 引入jar包,本工具类已经发布至maven官方仓库,直接引用即可,另外本工具依赖了apache的commons-crypto
+  需要一并引入,示例如下:
 ```xml
         <dependency>
             <groupId>org.apache.commons</groupId>
