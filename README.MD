@@ -1,5 +1,30 @@
 两个注解搞定字段的加解密
 ## 快速上手
+- 引入jar包,本工具类已经发布至maven官方仓库,直接引用即可,另外本工具依赖了apache的
+
+```xml
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-crypto</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>top.zhumang</groupId>
+            <artifactId>crypto-util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+```
+- springboot启动类加入对此工具类的扫描,使其正常初始化.
+```java
+@ComponentScan(basePackages = {"top.zhumang.crypto.common"})
+```
+ 如果启动后看到如下信息说明初始化正常:
+```text
+[INFO] - top.zhumang.crypto.common.dae.decryptor.CBCDecryptor.run(CBCDecryptor.java:49) - init CBCDecryptor success
+[INFO] - top.zhumang.crypto.common.dae.encryptor.CBCEncryptor.run(CBCEncryptor.java:41) - init CBCEncryptor success
+[INFO] - top.zhumang.crypto.common.dae.decryptor.ECBDecryptor.run(ECBDecryptor.java:37) - init ECBDecryptor success
+[INFO] - top.zhumang.crypto.common.dae.encryptor.ECBEncryptor.run(ECBEncryptor.java:29) - init ECBEncryptor success
+``` 
 - 设置加密密钥和偏移量
   目前对springboot项目支持较为优化,只需要在springboot的项目配置文件下加上以下两个
   配置变量即可:
@@ -22,8 +47,8 @@ CBCDecryptor(CBC模式的解密实现类),ECBDecryptor(ECB模式的解密实现�
 /**
 * 对该字段进行CBC模式的加密解密
 */
-@Decryption("CBCDecryptor")
-@Encryption("CBCEncryptor")
+@Decryption(decryptor="CBCDecryptor")
+@Encryption(encryptor="CBCEncryptor")
 private String email;
 ```
 
